@@ -27,6 +27,10 @@ public class SettingsLoad {
         int count = 0;
         while (true){
 
+            if(!(FC.contains("result"+count))){
+                break;
+            }
+
             ArrayList<Object> recipeArray = new ArrayList<>();
             HashMap<Integer, ItemStack> recipe = new HashMap<>();
             String resultPath = "result"+count+".";
@@ -102,32 +106,39 @@ public class SettingsLoad {
                         for(int e=0;e<enchantments.size();e++){
                             recipeStack.addUnsafeEnchantment(enchantments.get(e),enchantLevel.get(e));
                         }
-
                     }
                     recipe.put(i,recipeStack);
+                    recipeArray.add(recipe);
                 }else{
                     //not exist material scheme (use "same")
                     int sameSlot = FC.getInt(recipePath+"Same");
 
                     ItemStack sameStack = recipe.get(sameSlot);
 
-                    if(FC.contains(slotPath+"Change")){
+                    if(FC.contains(slotPath+"Change")) {
                         //exist "Change" scheme
-                        ArrayList<String> changeArray = new ArrayList<>(Arrays.asList(FC.getString(slotPath+"Change").split("&")));
-                        for(String loop:changeArray){
-                            if(loop.startsWith("Material,")){
+                        ArrayList<String> changeArray = new ArrayList<>(Arrays.asList(FC.getString(slotPath + "Change").split("&")));
+                        for (String loop : changeArray) {
+                            if (loop.startsWith("Material")) {
                                 //change Material
-                            }else if(loop.startsWith("Amount,")){
+                                ItemMeta sameMeta = sameStack.getItemMeta();
+                                //replace Material
+                                ItemStack newSameStack = new ItemStack(Material.valueOf(loop.replace("Material", "")));
+                                newSameStack.setItemMeta(sameMeta);
+
+                            } else if (loop.startsWith("Amount,")) {
                                 //change Amount
+                                sameStack.setAmount(Integer.valueOf(loop.replace("Amount", "")));
+
                             }
                         }
-
+                        recipe.put(i, sameStack);
+                        recipeArray.add(recipe);
                     }
                 }
-
             }
-
-
+            count++;
+            materialAndResult.add(recipeArray);
         }
     }
 }

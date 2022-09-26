@@ -15,6 +15,7 @@ public final class CustomCrafter extends JavaPlugin {
     public void onEnable() {
         //settings load
         this.load();
+        getCommand("customcrafterdebug").setExecutor(new Debug());
 
     }
 

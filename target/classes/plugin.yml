@@ -1,5 +1,5 @@
 name: CustomCrafter
-version: '${project.version}'
+version: '1'
 main: customcrafter.customcrafter.CustomCrafter
 api-version: 1.19
 authors: [ SakakiAruka ]
