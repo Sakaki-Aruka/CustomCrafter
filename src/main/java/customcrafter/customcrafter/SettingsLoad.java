@@ -7,10 +7,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
+import java.util.*;
 
 import static customcrafter.customcrafter.CustomCrafter.FC;
 
@@ -20,125 +17,132 @@ public class SettingsLoad {
         this.configLoad();
     }
 
-    public static ArrayList<ArrayList<Object>> materialAndResult = new ArrayList<>();
+    public static Map<Map<Integer,Map<Integer,ItemStack>>,ItemStack> recipeAndResult = new HashMap<>();
 
     public void configLoad(){
-
         int count = 0;
-        while (true){
 
-            if(!(FC.contains("result"+count))){
+        while (true){
+            if(FC.contains("result"+count)){
+                recipeAndResult.put(recipeLoad(count),resultLoad(count));
+                count++;
+            }else{
                 break;
             }
+        }
+    }
 
-            ArrayList<Object> recipeArray = new ArrayList<>();
-            HashMap<Integer, ItemStack> recipe = new HashMap<>();
-            String resultPath = "result"+count+".";
+    //load recipe
+    public Map recipeLoad(int number){
+        Map<Integer,Map<Integer,ItemStack>> returnMap = new HashMap<>();
+        Map<Integer,ItemStack> tempMap = new HashMap<>();
+        String path = "recipe"+number+".";
 
-            ItemStack result;
-            ItemMeta resultMeta;
+        int craftType = FC.getInt(path+"CraftType");
 
-            result = new ItemStack(Material.valueOf(FC.getString(resultPath+"Material").toUpperCase(Locale.ROOT)));
-            resultMeta = result.getItemMeta();
-            resultMeta.setDisplayName(FC.getString(resultPath+"Name"));
-            resultMeta.setLore(Arrays.asList(FC.getString(resultPath+"Lore").split("!&!")));
+        for(int i=1;i<=craftType;i++){
+            String sPath = path+"s"+i+".";
+            ItemStack itemStack = null;
+            if(FC.contains(sPath)){
+                if(FC.contains(sPath+"Same")){
+                    //exist "Same"
+                    int slotNumber = FC.getInt(sPath+"Same");
+                    String samePath = path+"s"+slotNumber+".";
+                    itemStack = this.recipeSupport(samePath);
+                    if(FC.contains(sPath+"Change")){
+                        for(String loop:FC.getString(sPath+"Change").toUpperCase(Locale.ROOT).split(",")){
+                            if(loop.startsWith("MATERIAL")){
+                                String id = Arrays.asList(loop.split(";")).get(1);
+                                Material material = Material.valueOf(id);
 
-            //exist enchantment settings
-            if(FC.contains(resultPath+"Enchant")){
-                ArrayList<Enchantment> enchantments = new ArrayList<>();
-                ArrayList<Integer> enchantLevel = new ArrayList<>();
-                //get enchantments
-                for(String loop : FC.getString(resultPath+"Enchantment").toUpperCase(Locale.ROOT).split(",")){
-                    enchantments.add(Enchantment.getByName(loop));
-                }
-                //get enchantments level
-                for(String loop: FC.getString(resultPath+"Enchant_level").split(",")){
-                    enchantLevel.add(Integer.valueOf(loop));
-                }
+                                itemStack.setType(material);
 
-                for(int i=0;i<enchantments.size();i++){
-                    result.addUnsafeEnchantment(enchantments.get(i),enchantLevel.get(i));
-                }
+                            }else if(loop.startsWith("AMOUNT")){
+                                int amount = Integer.valueOf(Arrays.asList(loop.split(";")).get(1));
+                                itemStack.setAmount(amount);
+                            }else if(loop.startsWith("ENCHANT")){
+                                //remove all enchantments
+                                for(Map.Entry<Enchantment,Integer> entry:itemStack.getEnchantments().entrySet()){
+                                    itemStack.removeEnchantment(entry.getKey());
+                                }
+                                //add enchantment
+                                Map<Enchantment,Integer> eMap = new HashMap<>();
+                                for(String eLoop:loop.replace("ENCHANT;","").split("&")){
+                                    Enchantment enchant = Enchantment.getByName(Arrays.asList(eLoop.toUpperCase(Locale.ROOT).split("~")).get(0));
+                                    int level = Integer.valueOf(Arrays.asList(eLoop.split("~")).get(1));
+                                    ItemMeta itemMeta = itemStack.getItemMeta();
+                                    itemMeta.addEnchant(enchant,level,true);
+                                    itemStack.setItemMeta(itemMeta);
+                                }
 
-            }
-            //exist un-break setting
-            if(FC.contains(resultPath+"Unbreak")){
-                resultMeta.setUnbreakable(true);
-            }
 
-            //exist itemFlag settings
-            if(FC.contains(resultPath+"ItemFlag")){
-                for(String loop:FC.getString(resultPath+"ItemFlag").toUpperCase(Locale.ROOT).split(",")){
-                    resultMeta.addItemFlags(ItemFlag.valueOf(loop));
-                }
-            }
-            //make itemStack to perfect style
-            result.setItemMeta(resultMeta);
-            //add result to a recipeArray
-            recipeArray.add(result);
-
-            //recipe
-            String recipePath = "recipe"+count+".";
-            int craftType = FC.getInt(recipePath+"CraftType");
-
-            for(int i=1;i<=craftType;i++){
-                String slotPath = recipePath+"s"+i+".";
-                //exist material scheme (not use "same")
-                if(FC.contains(slotPath+"Material")){
-                    Material material = Material.valueOf(FC.getString(slotPath+"Material").toUpperCase(Locale.ROOT));
-                    ItemStack recipeStack = new ItemStack(material);
-                    recipeStack.setAmount(FC.getInt(slotPath+"Amount"));
-
-                    //exist enchantment settings
-                    if(FC.contains(slotPath+"Enchant")){
-                        ArrayList<Enchantment> enchantments = new ArrayList<>();
-                        ArrayList<Integer> enchantLevel = new ArrayList<>();
-
-                        //get enchantment
-                        for(String loop:FC.getString(slotPath+"Enchant").toUpperCase(Locale.ROOT).split(",")){
-                            enchantments.add(Enchantment.getByName(loop));
-                        }
-                        //get enchantment level
-                        for(String loop:FC.getString(slotPath+"Enchant_level").split(",")){
-                            enchantLevel.add(Integer.valueOf(loop));
-                        }
-                        //add enchantment and enchantmentLevel settings to itemMeta
-                        for(int e=0;e<enchantments.size();e++){
-                            recipeStack.addUnsafeEnchantment(enchantments.get(e),enchantLevel.get(e));
-                        }
-                    }
-                    recipe.put(i,recipeStack);
-                    recipeArray.add(recipe);
-                }else{
-                    //not exist material scheme (use "same")
-                    int sameSlot = FC.getInt(recipePath+"Same");
-
-                    ItemStack sameStack = recipe.get(sameSlot);
-
-                    if(FC.contains(slotPath+"Change")) {
-                        //exist "Change" scheme
-                        ArrayList<String> changeArray = new ArrayList<>(Arrays.asList(FC.getString(slotPath + "Change").split("&")));
-                        for (String loop : changeArray) {
-                            if (loop.startsWith("Material")) {
-                                //change Material
-                                ItemMeta sameMeta = sameStack.getItemMeta();
-                                //replace Material
-                                ItemStack newSameStack = new ItemStack(Material.valueOf(loop.replace("Material", "")));
-                                newSameStack.setItemMeta(sameMeta);
-
-                            } else if (loop.startsWith("Amount,")) {
-                                //change Amount
-                                sameStack.setAmount(Integer.valueOf(loop.replace("Amount", "")));
 
                             }
                         }
-                        recipe.put(i, sameStack);
-                        recipeArray.add(recipe);
                     }
+
+                }else{
+                    itemStack = this.recipeSupport(sPath);
                 }
+
             }
-            count++;
-            materialAndResult.add(recipeArray);
+            tempMap.put(i,itemStack);
         }
+        returnMap.put(craftType,tempMap);
+        return returnMap;
+    }
+
+    public ItemStack recipeSupport(String sPath){
+        ItemStack itemStack = null;
+        itemStack = new ItemStack(Material.valueOf(FC.getString(sPath+"Material").toUpperCase(Locale.ROOT)));
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        int amount = FC.getInt(sPath+"Amount");
+        itemStack.setAmount(amount);
+        if(FC.contains(sPath+"Enchant")){
+            for(String loop:FC.getString(sPath+"Enchant").toUpperCase(Locale.ROOT).split(",")){
+                Enchantment enchant = Enchantment.getByName(Arrays.asList(loop.split(";")).get(0));
+                int level =Integer.valueOf(Arrays.asList(loop.split(";")).get(1));
+                itemMeta.addEnchant(enchant,level,true);
+
+            }
+        }
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    public ItemStack resultLoad(int number){
+        String path = "result"+number+".";
+
+        ItemStack itemStack = new ItemStack(Material.valueOf(FC.getString(path+"Material").toUpperCase(Locale.ROOT)));
+        itemStack.setAmount(FC.getInt(path+"Amount"));
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        itemMeta.setDisplayName(FC.getString(path+"Name"));
+        //exist enchant settings
+        if(FC.contains(path+"Enchant")){
+            for(String loop:FC.getString(path+"Enchant").split(",")){
+                Enchantment enchant = Enchantment.getByName(Arrays.asList(loop.split(";")).get(0).toUpperCase(Locale.ROOT));
+                int level = Integer.valueOf(Arrays.asList(loop.split(";")).get(1));
+                itemMeta.addEnchant(enchant,level,true);
+            }
+        }
+        //exist lore settings
+        if(FC.contains(path+"Lore")){
+            itemMeta.setLore(Arrays.asList(FC.getString(path+"Lore").split("!&!")));
+        }
+        //exist unbreakable settings
+        if(FC.contains(path+"Unbreak")){
+            itemMeta.setUnbreakable(true);
+        }
+        //exist itemFlag settings
+        if(FC.contains(path+"ItemFlag")){
+            for(String loop:FC.getString(path+"ItemFlag").toUpperCase(Locale.ROOT).split(",")){
+                itemMeta.addItemFlags(ItemFlag.valueOf(loop));
+            }
+        }
+
+        //itemMeta set to a ItemStack
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 }

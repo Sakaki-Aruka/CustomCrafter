@@ -14,8 +14,10 @@ public final class CustomCrafter extends JavaPlugin {
     @Override
     public void onEnable() {
         //settings load
+        saveDefaultConfig();
         this.load();
         getCommand("customcrafterdebug").setExecutor(new Debug());
+        getCommand("customopen").setExecutor(new OpenCraftingGUI());
 
     }
 
