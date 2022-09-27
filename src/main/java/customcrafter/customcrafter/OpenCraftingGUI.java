@@ -25,7 +25,10 @@ public class OpenCraftingGUI implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        player.openInventory(new createGUI().create9());
+        Inventory inventory = Bukkit.createInventory(null,27,"CustomCrafter");
+
+        inventory.setContents(new createGUI().fill(3));
+        player.openInventory(inventory);
         guiOpen.put(player,3);
         return true;
 

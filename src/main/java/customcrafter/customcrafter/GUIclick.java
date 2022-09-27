@@ -32,9 +32,6 @@ public class GUIclick {
                     //get crafting table size
                     int slots = type * 9;
 
-                    //debug
-                    player.sendMessage("type:"+type);
-                    player.sendMessage("slots:"+new createGUI().okSlot(type));
 
                     int count = 0;
                     for(int loop : new createGUI().okSlot(type)){
@@ -42,9 +39,6 @@ public class GUIclick {
                         count++;
                     }
 
-                    //debug
-                    map.put(slotItem,type);
-                    player.sendMessage("TorF:"+recipeAndResult.containsKey(map));
 
                     ItemStack result = this.searchResult(type,slotItem);
                     if(this.searchResult(type,slotItem)!= null){
@@ -55,11 +49,12 @@ public class GUIclick {
                         //replace gui menu and place result in a slot No.8
                         if(type==3){
                             event.getClickedInventory().setItem(8,result);
+                            player.getWorld().dropItemNaturally(player.getLocation(),event.getClickedInventory().getItem(8));
                             //replace black-stained-glass-pane
                             event.getClickedInventory().setContents(new createGUI().fill(type));
 
                         }else if(type==4){
-                            new createGUI().create16();
+                            player.getWorld().dropItemNaturally(player.getLocation(),result);
                         }
                         //
 

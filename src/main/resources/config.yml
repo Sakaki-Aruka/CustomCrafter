@@ -28,13 +28,19 @@ recipe0:
     Change: enchant;luck~1&lure~1,amount;10
 
 
-#result1:
-#  Material: dirt
-#  Name: dirt
+result1:
+  Material: dirt
+  Name: dirt
+  Amount: 1
 
 
-#recipe1:
-#  CraftType: 9
-#  s1:
-#    Material: stone
-#    Amount
+recipe1:
+  CraftType: 3
+  s1:
+    Material: stone
+    Amount: 1
+  s2:
+    Same: 1
+  s3:
+    Same: 1
+
