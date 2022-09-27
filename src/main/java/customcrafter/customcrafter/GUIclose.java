@@ -13,7 +13,7 @@ public class GUIclose {
         UUID uuid = event.getPlayer().getUniqueId();
         Player player = Bukkit.getPlayer(uuid);
 
-        if(guiOpen.contains(player)){
+        if(guiOpen.containsKey(player)){
             guiOpen.remove(player);
         }
     }

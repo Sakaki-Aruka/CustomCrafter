@@ -1,4 +1,8 @@
-customcrafter\customcrafter\OpenCraftingGUI.class
 customcrafter\customcrafter\SettingsLoad.class
+customcrafter\customcrafter\GUIclose.class
+customcrafter\customcrafter\OpenCraftingGUI.class
+customcrafter\customcrafter\createGUI.class
+customcrafter\customcrafter\Events.class
+customcrafter\customcrafter\GUIclick.class
 customcrafter\customcrafter\Debug.class
 customcrafter\customcrafter\CustomCrafter.class

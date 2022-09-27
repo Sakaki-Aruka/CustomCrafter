@@ -10,7 +10,7 @@ result0:
   ItemFlag: hide_unbreakable
 
 recipe0:
-  CraftType: 9
+  CraftType: 3
   s1:
     Material: diamond
     Amount: 3

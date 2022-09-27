@@ -11,10 +11,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OpenCraftingGUI implements CommandExecutor {
 
-    public static ArrayList<Player> guiOpen = new ArrayList<>();
+    public static Map<Player,Integer> guiOpen = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command,String label,String[] args){
@@ -23,22 +25,9 @@ public class OpenCraftingGUI implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        Inventory inventory = Bukkit.createInventory(null,27,"CustomCrafter");
-        Material blackGlass = Material.BLACK_STAINED_GLASS_PANE;
-        this.setSupport(inventory,3,7,blackGlass);
-        this.setSupport(inventory,12,17,blackGlass);
-        this.setSupport(inventory,21,22,blackGlass);
-
-        player.openInventory(inventory);
-        guiOpen.add(player);
+        player.openInventory(new createGUI().create9());
+        guiOpen.put(player,3);
         return true;
 
-    }
-
-    public void setSupport(Inventory inventory, int start, int end,Material material){
-        ItemStack itemStack = new ItemStack(material);
-        for(int i=start;i<=end;i++){
-            inventory.setItem(i,itemStack);
-        }
     }
 }

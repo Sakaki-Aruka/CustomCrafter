@@ -17,14 +17,18 @@ public class SettingsLoad {
         this.configLoad();
     }
 
-    public static Map<Map<Integer,Map<Integer,ItemStack>>,ItemStack> recipeAndResult = new HashMap<>();
+    public static Map<Map<Map<Integer,ItemStack>,Integer>,ItemStack> recipeAndResult = new HashMap<>();
 
     public void configLoad(){
         int count = 0;
 
         while (true){
             if(FC.contains("result"+count)){
-                recipeAndResult.put(recipeLoad(count),resultLoad(count));
+                int guiSize = FC.getInt("recipe"+count+".CraftType");
+                Map<Map<Integer,ItemStack>,Integer> key = new HashMap<>();
+                key.put(recipeLoad(count),guiSize);
+
+                recipeAndResult.put(key,resultLoad(count));
                 count++;
             }else{
                 break;
@@ -34,13 +38,13 @@ public class SettingsLoad {
 
     //load recipe
     public Map recipeLoad(int number){
-        Map<Integer,Map<Integer,ItemStack>> returnMap = new HashMap<>();
+        //Map<Integer,Map<Integer,ItemStack>> returnMap = new HashMap<>();
         Map<Integer,ItemStack> tempMap = new HashMap<>();
         String path = "recipe"+number+".";
 
         int craftType = FC.getInt(path+"CraftType");
 
-        for(int i=1;i<=craftType;i++){
+        for(int i=1;i<=(craftType * craftType);i++){
             String sPath = path+"s"+i+".";
             ItemStack itemStack = null;
             if(FC.contains(sPath)){
@@ -74,9 +78,6 @@ public class SettingsLoad {
                                     itemMeta.addEnchant(enchant,level,true);
                                     itemStack.setItemMeta(itemMeta);
                                 }
-
-
-
                             }
                         }
                     }
@@ -84,12 +85,11 @@ public class SettingsLoad {
                 }else{
                     itemStack = this.recipeSupport(sPath);
                 }
-
             }
-            tempMap.put(i,itemStack);
+            tempMap.put(i-1,itemStack);
         }
-        returnMap.put(craftType,tempMap);
-        return returnMap;
+        //returnMap.put(craftType,tempMap);
+        return tempMap;
     }
 
     public ItemStack recipeSupport(String sPath){

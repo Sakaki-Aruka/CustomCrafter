@@ -18,6 +18,7 @@ public final class CustomCrafter extends JavaPlugin {
         this.load();
         getCommand("customcrafterdebug").setExecutor(new Debug());
         getCommand("customopen").setExecutor(new OpenCraftingGUI());
+        getServer().getPluginManager().registerEvents(new Events(),this);
 
     }
 
