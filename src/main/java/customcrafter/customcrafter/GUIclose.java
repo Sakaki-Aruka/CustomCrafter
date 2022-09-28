@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static customcrafter.customcrafter.GUIclick.nextPage;
 import static customcrafter.customcrafter.OpenCraftingGUI.guiOpen;
 
 public class GUIclose {
@@ -24,40 +23,6 @@ public class GUIclose {
         if(guiOpen.containsKey(player)){
             guiOpen.remove(player);
 
-            /*
-            if(nextPage.containsKey(player)){
-                int type =  Integer.valueOf(nextPage.get(player)).intValue();
-                Inventory inventory = null;
-                inventory = Bukkit.createInventory(null,type*9,"CustomCrafter");
-
-                if(type==3){
-                    inventory.setContents(new createGUI().fill(3));
-                }else if(type==4){
-                    inventory.setContents(new createGUI().fill(4));
-
-                    //debug
-                    player.sendMessage("now:4");
-                    ItemStack[] test = new createGUI().fill(4);
-                    for(int i=0;i<36;i++){
-                        player.sendMessage(i+"Slot:"+test[i]);
-                    }
-                    player.openInventory(inventory);
-
-                }else if(type==5){
-                    inventory.setContents(new createGUI().fill(5));
-                }else if(type==6){
-                    inventory.setContents(new createGUI().fill(6));
-                }
-
-
-
-                //debug
-                player.sendMessage("new:"+type);
-
-                guiOpen.put(player,type);
-                nextPage.remove(player);
-            }
-            */
         }
     }
 }
