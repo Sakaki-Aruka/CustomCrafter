@@ -8,8 +8,11 @@ website: https://github.com/Sakaki-Aruka
 commands:
   customcrafterdebug:
     permission: cc.op
+  ccreload:
+    permission: cc.op
   customopen:
     permission: cc.default
+
 
 permissions:
   cc.op:

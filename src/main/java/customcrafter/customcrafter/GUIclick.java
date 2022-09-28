@@ -66,29 +66,26 @@ public class GUIclick {
                 }
 
             }else{
-                if(type*9 - clickSlot <= 3){
+                if(0 <= type*9 - clickSlot && type*9 - clickSlot <= 3){
+                    event.setCancelled(true);
                     ArrayList<String> arr = new ArrayList<>(Arrays.asList("6","5","4","3"));
-                    arr.remove(type*9-clickSlot);
+                    //arr.remove(type*9-clickSlot);
+                    arr.remove(String.valueOf(type));
 
                     // example):27 -1 -24 = 2
                     int amethyst = type*9 - 1 - clickSlot;
                     String nextGUIType = arr.get(amethyst);
-
-                    //debug
-                    player.setDisplayName("amethyst:"+amethyst+" / next:"+nextGUIType);
 
                     //nextPage.put(player,nextGUIType);
                     player.closeInventory();
                     this.inventoryOpen(Integer.valueOf(nextGUIType),player);
                     return;
 
-                }else if(type*9 <= clickSlot){
+                }else{
                     //click players inventory(can click and something)
 
                     return;
                 }
-                event.setCancelled(true);
-                return;
             }
 
         }
