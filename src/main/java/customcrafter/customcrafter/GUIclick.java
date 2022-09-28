@@ -4,16 +4,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static customcrafter.customcrafter.OpenCraftingGUI.guiOpen;
 import static customcrafter.customcrafter.SettingsLoad.recipeAndResult;
 
 public class GUIclick {
+    public static Map<Player,String> nextPage = new HashMap<>();
+
     public void clickMain(InventoryClickEvent event){
 
         UUID uuid = event.getWhoClicked().getUniqueId();
@@ -22,7 +23,7 @@ public class GUIclick {
         if(guiOpen.containsKey(player)){
             int type = guiOpen.get(player);
             int clickSlot = event.getRawSlot();
-            Map<Map<Integer,ItemStack>,Integer>  map = new HashMap<>();
+            //Map<Map<Integer,ItemStack>,Integer>  map = new HashMap<>();
 
             if(new createGUI().okSlot(type).contains(clickSlot) || clickSlot ==8){
                 //
@@ -47,16 +48,12 @@ public class GUIclick {
                             event.getClickedInventory().setItem(i,null);
                         }
                         //replace gui menu and place result in a slot No.8
-                        if(type==3){
-                            event.getClickedInventory().setItem(8,result);
-                            player.getWorld().dropItemNaturally(player.getLocation(),event.getClickedInventory().getItem(8));
+                        if(type==3 || type==4 || type==5 || type==6){
+                            player.getWorld().dropItemNaturally(player.getLocation(),result);
                             //replace black-stained-glass-pane
                             event.getClickedInventory().setContents(new createGUI().fill(type));
 
-                        }else if(type==4){
-                            player.getWorld().dropItemNaturally(player.getLocation(),result);
                         }
-                        //
 
                     }else{
                         if(event.getClickedInventory().getItem(8)!=null){
@@ -69,8 +66,25 @@ public class GUIclick {
                 }
 
             }else{
-                if(type*9 <= clickSlot){
+                if(type*9 - clickSlot <= 3){
+                    ArrayList<String> arr = new ArrayList<>(Arrays.asList("6","5","4","3"));
+                    arr.remove(type*9-clickSlot);
+
+                    // example):27 -1 -24 = 2
+                    int amethyst = type*9 - 1 - clickSlot;
+                    String nextGUIType = arr.get(amethyst);
+
+                    //debug
+                    player.setDisplayName("amethyst:"+amethyst+" / next:"+nextGUIType);
+
+                    //nextPage.put(player,nextGUIType);
+                    player.closeInventory();
+                    this.inventoryOpen(Integer.valueOf(nextGUIType),player);
+                    return;
+
+                }else if(type*9 <= clickSlot){
                     //click players inventory(can click and something)
+
                     return;
                 }
                 event.setCancelled(true);
@@ -93,5 +107,12 @@ public class GUIclick {
             }
         }
         return null;
+    }
+
+    public void inventoryOpen(int type,Player player){
+        Inventory inventory = Bukkit.createInventory(null,type*9,"CustomCrafter");
+        inventory.setContents(new createGUI().fill(type));
+        player.openInventory(inventory);
+        guiOpen.put(player,type);
     }
 }

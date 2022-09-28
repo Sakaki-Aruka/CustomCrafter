@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
+import static customcrafter.customcrafter.OpenCraftingGUI.guiOpen;
 import static customcrafter.customcrafter.SettingsLoad.recipeAndResult;
 
 
@@ -21,6 +22,10 @@ public class Debug implements CommandExecutor {
             player.sendMessage("key:"+entry.getKey());
             player.sendMessage("value:"+entry.getValue());
             player.sendMessage("---");
+        }
+
+        for(Map.Entry<Player,Integer> entry:guiOpen.entrySet()){
+            player.sendMessage("guiPage:"+entry.getValue());
         }
 
         return true;
