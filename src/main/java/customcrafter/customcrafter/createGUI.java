@@ -64,10 +64,6 @@ public class createGUI {
         ItemStack[] itemStacks = new ItemStack[type*9];
         ArrayList<ItemStack> sizeAmethyst = this.sizeSet(type);
 
-        //debug
-        Bukkit.broadcastMessage("okSlot:"+array);
-        Bukkit.broadcastMessage("amethyst:"+sizeAmethyst);
-
         for(int i=0;i<type*9;i++){
             if(!(array.contains(i))){
                 if(i==8){

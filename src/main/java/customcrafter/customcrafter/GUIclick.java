@@ -1,7 +1,6 @@
 package customcrafter.customcrafter;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -13,7 +12,6 @@ import static customcrafter.customcrafter.OpenCraftingGUI.guiOpen;
 import static customcrafter.customcrafter.SettingsLoad.recipeAndResult;
 
 public class GUIclick {
-    public static Map<Player,String> nextPage = new HashMap<>();
 
     public void clickMain(InventoryClickEvent event){
 
@@ -66,7 +64,7 @@ public class GUIclick {
                 }
 
             }else{
-                if(0 <= type*9 - clickSlot && type*9 - clickSlot <= 3){
+                if(1 <= type*9 - clickSlot && type*9 - clickSlot <= 3){
                     event.setCancelled(true);
                     ArrayList<String> arr = new ArrayList<>(Arrays.asList("6","5","4","3"));
                     //arr.remove(type*9-clickSlot);
@@ -83,7 +81,10 @@ public class GUIclick {
 
                 }else{
                     //click players inventory(can click and something)
-
+                    if(clickSlot < type*9 -1){
+                        event.setCancelled(true);
+                        return;
+                    }
                     return;
                 }
             }

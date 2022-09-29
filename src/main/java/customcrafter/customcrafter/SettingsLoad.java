@@ -70,7 +70,7 @@ public class SettingsLoad {
                                     itemStack.removeEnchantment(entry.getKey());
                                 }
                                 //add enchantment
-                                Map<Enchantment,Integer> eMap = new HashMap<>();
+                                //Map<Enchantment,Integer> eMap = new HashMap<>();
                                 for(String eLoop:loop.replace("ENCHANT;","").split("&")){
                                     Enchantment enchant = Enchantment.getByName(Arrays.asList(eLoop.toUpperCase(Locale.ROOT).split("~")).get(0));
                                     int level = Integer.valueOf(Arrays.asList(eLoop.split("~")).get(1));
