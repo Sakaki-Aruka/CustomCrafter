@@ -1,6 +1,7 @@
 package customcrafter.customcrafter;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -94,7 +95,53 @@ public class GUIclick {
     }
 
     private ItemStack searchResult(int type,Map<Integer,ItemStack> recipe){
+        /*
         //set key (made from recipeMap and GUi size (int))
+
+        ArrayList<Material> materials = new ArrayList<>();
+        ArrayList<Integer> amounts = new ArrayList<>();
+
+        for(Map.Entry<Integer,ItemStack> entry: recipe.entrySet()){
+            if(entry.getValue()!=null){
+                materials.add(entry.getValue().getType());
+                amounts.add(entry.getValue().getAmount());
+            }else{
+                materials.add(null);
+            }
+        }
+
+
+        top:
+        for(Map.Entry<ArrayList<Material>,ArrayList<Object>> entry: materialList.entrySet()){
+            if(entry.getKey().equals(materials)){
+                //debug
+                Bukkit.broadcastMessage("same pattern item found in recipes.");
+                Bukkit.broadcastMessage("same pattern item is ->:"+entry.getValue().get(3));
+                boolean check = amounts.equals(entry.getValue().get(1));
+                ArrayList<Integer> integers = (ArrayList<Integer>) entry.getValue().get(1);
+                if(!check){
+                    for(int i=1;i<=64;i++){
+                        int tempInt = i;
+                        ArrayList<Integer> intClone = (ArrayList<Integer>)(integers.clone());
+                        intClone.replaceAll(in -> in * tempInt);
+                        if(amounts.equals(intClone)){
+                            Bukkit.broadcastMessage("amount same :"+i+" times arr.");
+                            break top;
+                        }else{
+                            continue;
+                        }
+                    }
+                }
+
+                Bukkit.broadcastMessage("amount check:"+check);
+
+                return null;
+            }
+        }
+
+         */
+        //debug lines in(2022-09-30)
+
         Map<Map<Integer,ItemStack>,Integer> key = new HashMap<>();
         for(Map.Entry<Map<Map<Integer,ItemStack>,Integer>,ItemStack> entry:recipeAndResult.entrySet()){
 
@@ -104,6 +151,8 @@ public class GUIclick {
                 return entry.getValue();
             }
         }
+
+
         return null;
     }
 

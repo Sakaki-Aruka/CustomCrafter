@@ -27,20 +27,21 @@ recipe0:
     Same: 1
     Change: enchant;luck~1&lure~1,amount;10
 
+p0:
+  material: stone
+  amount: 1
 
-result1:
-  Material: dirt
-  Name: dirt
-  Amount: 1
+  enchant: mending;1,dig_speed;1
 
-
-recipe1:
-  CraftType: 3
-  s1:
-    Material: stone
-    Amount: 1
-  s2:
-    Same: 1
-  s3:
-    Same: 1
-
+result0:
+  type: 3
+  material: dirt
+  amount: 10
+  name: test dirt
+  enchant: mending;1,dig_speed;1
+  lore: this!&!string!&!is a test.
+  itemflag: hide_unbreakable
+  recipe:
+    line0: p0,n,p0
+    line1: p0,n,n
+    line2: n,n,n

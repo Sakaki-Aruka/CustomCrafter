@@ -3,6 +3,7 @@ package customcrafter.customcrafter;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,6 +20,7 @@ public class SettingsLoad {
 
     public static Map<Map<Map<Integer,ItemStack>,Integer>,ItemStack> recipeAndResult = new HashMap<>();
 
+
     public void configLoad(){
         int count = 0;
 
@@ -34,6 +36,8 @@ public class SettingsLoad {
                 break;
             }
         }
+
+
     }
 
     //load recipe
