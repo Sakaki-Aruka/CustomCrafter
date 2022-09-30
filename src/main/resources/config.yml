@@ -1,31 +1,31 @@
 # this file is a config file.
-result0:
-  Material: diamond_pickaxe
-  Name: test pickaxe
-  Amount: 1
+#result0:
+#  Material: diamond_pickaxe
+#  Name: test pickaxe
+#  Amount: 1
 
-  Enchant: mending;1,dig_speed;1
-  Lore: test!&!test!&!test
-  Unbreak: true
-  ItemFlag: hide_unbreakable
+#  Enchant: mending;1,dig_speed;1
+#  Lore: test!&!test!&!test
+#  Unbreak: true
+#  ItemFlag: hide_unbreakable
 
-recipe0:
-  CraftType: 3
-  s1:
-    Material: diamond
-    Amount: 3
-    Enchant: mending;1,dig_speed;1
+#recipe0:
+#  CraftType: 3
+#  s1:
+#    Material: diamond
+#    Amount: 3
+#    Enchant: mending;1,dig_speed;1
 
-  s2:
-    Same: 1
-    Change: Material;dirt
-  s3:
-    Same: 1
-    Change: material;sand,amount;10
+#  s2:
+#    Same: 1
+#    Change: Material;dirt
+#  s3:
+#    Same: 1
+#    Change: material;sand,amount;10
 
-  s4:
-    Same: 1
-    Change: enchant;luck~1&lure~1,amount;10
+#  s4:
+#    Same: 1
+#    Change: enchant;luck~1&lure~1,amount;10
 
 p0:
   material: stone
